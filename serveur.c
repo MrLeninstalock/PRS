@@ -16,7 +16,7 @@
 
 #define RCVSIZE 10
 #define BUFFSIZE 1024
-
+//TEST
 int main (int argc, char *argv[]) {
     if(argc != 2) {
         printf("ERREUR nombre d'arguments invalides\n");
