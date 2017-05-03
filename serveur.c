@@ -44,6 +44,9 @@ int main (int argc, char *argv[]) {
     struct sockaddr_in adresse, adresseClient, adressePrive;
     socklen_t alen= sizeof(adresseClient);
     socklen_t alenPrive = sizeof(adressePrive);
+    fd_set Ldesc;
+    struct timeval tv;
+    tv.tv_sec=1;
 
 
 
@@ -138,6 +141,7 @@ int main (int argc, char *argv[]) {
                     numACK =0;
                     int onContinue = 1;
                     int i;
+                    char ACKrecu[6] = {'A', 'A', 'A', 'A', 'A', 'A'};
                     printf("Fichier recherché : %s\n", bufferACK);
                     file = fopen(bufferACK,"r");
     				if(file==NULL){
@@ -173,7 +177,6 @@ int main (int argc, char *argv[]) {
                             printf("%c",bufferEnvoi[i]);
                         }
                         printf("\n");
-                        //printf("Test du tableau ACK : %s\n", bufferEnvoi);
                         for(i=0; i<BUFFSIZE-6; i++){
                             tmp = fgetc(file);
                             if(tmp != EOF && onContinue==1) {
@@ -185,14 +188,31 @@ int main (int argc, char *argv[]) {
                                 break;
                             }
                         }
-                        //printf("%s\n", bufferLecture);
                         memcpy(&bufferEnvoi[6], bufferLecture, BUFFSIZE-6);
 
                         //printf("Test après ajout ACK : %s\n", bufferEnvoi);
-                        envoi = sendto(descripteurSocketDonnees, bufferEnvoi, i+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                        sendto(descripteurSocketDonnees, bufferEnvoi, i+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                        printf("On attend confirmation de l'ACK\n");
 
+                        while(atoi(ACKrecu) < numACK && onContinue == 1) {
 
-                        printf("Envoie : %d\nSur le port :%d & l'adresse %s\n", envoi, htons(adressePrive.sin_port), inet_ntoa(adressePrive.sin_addr));
+                            FD_ZERO(&Ldesc);
+                            FD_SET(descripteurSocketDonnees,&Ldesc);
+                            tv.tv_sec=1;
+                            tv.tv_usec =0;
+                            printf("On va faire le select\n");
+                    	    int a = select(descripteurSocketDonnees+1,&Ldesc,NULL,NULL, &tv);
+                            printf("Select : %d\n", a);
+                            if(FD_ISSET(descripteurSocketDonnees,&Ldesc)==1) {
+                                recvfrom(descripteurSocketDonnees, bufferACK, RCVSIZE, 0, (struct sockaddr*)&adressePrive, &alenPrive);
+                                for(int j = 0; j<6; j++) {
+                                    ACKrecu[j] = bufferACK[j+3];
+                                }
+                            } else {
+                                sendto(descripteurSocketDonnees, bufferEnvoi, i+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+
+                            }
+                        }
                     }
                     memset(bufferEnvoi, '0', BUFFSIZE);
                     bufferEnvoi[0] = 'F';
