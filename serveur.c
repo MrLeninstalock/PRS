@@ -198,8 +198,8 @@ int main (int argc, char *argv[]) {
 
                             FD_ZERO(&Ldesc);
                             FD_SET(descripteurSocketDonnees,&Ldesc);
-                            tv.tv_sec=1;
-                            tv.tv_usec =0;
+                            tv.tv_sec=0;
+                            tv.tv_usec =200;
                             printf("On va faire le select\n");
                     	    int a = select(descripteurSocketDonnees+1,&Ldesc,NULL,NULL, &tv);
                             printf("Select : %d\n", a);
