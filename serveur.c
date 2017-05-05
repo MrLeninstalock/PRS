@@ -36,6 +36,7 @@ int main (int argc, char *argv[]) {
     char tmp;
     int numACK=0;
     char tabACK[6];
+    int sizeBuffer;
 
 
     /*
@@ -141,6 +142,8 @@ int main (int argc, char *argv[]) {
                     numACK =0;
                     int onContinue = 1;
                     int i;
+                    int flightSize=0;
+                    int cwnd=1;
                     char ACKrecu[6] = {'A', 'A', 'A', 'A', 'A', 'A'};
                     printf("Fichier recherché : %s\n", bufferACK);
                     file = fopen(bufferACK,"r");
@@ -177,21 +180,16 @@ int main (int argc, char *argv[]) {
                             printf("%c",bufferEnvoi[i]);
                         }
                         printf("\n");
-                        for(i=0; i<BUFFSIZE-6; i++){
-                            tmp = fgetc(file);
-                            if(tmp != EOF && onContinue==1) {
-                                bufferLecture[i] = tmp;
-                            } else {
-                                bufferLecture[i] = tmp;
-                                printf("On est arrivés a la fin !\n");
-                                onContinue = 0;
-                                break;
-                            }
+
+                        sizeBuffer=fread(bufferLecture, 1, BUFFSIZE-6, file);
+                        if(feof(file)){
+                            onContinue=0;
                         }
                         memcpy(&bufferEnvoi[6], bufferLecture, BUFFSIZE-6);
 
                         //printf("Test après ajout ACK : %s\n", bufferEnvoi);
-                        sendto(descripteurSocketDonnees, bufferEnvoi, i+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                        sendto(descripteurSocketDonnees, bufferEnvoi, sizeBuffer+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                        flightSize++;
                         printf("On attend confirmation de l'ACK\n");
 
                         while(atoi(ACKrecu) < numACK && onContinue == 1) {
@@ -199,7 +197,7 @@ int main (int argc, char *argv[]) {
                             FD_ZERO(&Ldesc);
                             FD_SET(descripteurSocketDonnees,&Ldesc);
                             tv.tv_sec=0;
-                            tv.tv_usec =200;
+                            tv.tv_usec =350;
                             printf("On va faire le select\n");
                     	    int a = select(descripteurSocketDonnees+1,&Ldesc,NULL,NULL, &tv);
                             printf("Select : %d\n", a);
@@ -209,10 +207,11 @@ int main (int argc, char *argv[]) {
                                     ACKrecu[j] = bufferACK[j+3];
                                 }
                             } else {
-                                sendto(descripteurSocketDonnees, bufferEnvoi, i+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                                sendto(descripteurSocketDonnees, bufferEnvoi, sizeBuffer+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
 
                             }
                         }
+                        flightSize--;
                     }
                     memset(bufferEnvoi, '0', BUFFSIZE);
                     bufferEnvoi[0] = 'F';
