@@ -1,0 +1,842 @@
+State of the art
+Thomas Rochette
+1
+Introduction
+The Articial Inteligence (AI) is a large eld including a lot of methods to solve
+practical and theoretical problems including games. All thoses methods are
+linked to algorithms which have evolved since the middle of the 20 th century with
+the progress o hardware and software. We are now capable to store an amount
+of data that we could not even imagine at the begining of AI research. More,
+we can develop and compute sosticated algorithms with tools and languages
+that are now easier to use, everyone can now learn and start develop his own
+AI. Nowadays with the expansion of techonoly, which we use all the time, and
+the development of Internet Of Things, IA is an important subject of research
+and companyies invest a lot in it trying to develop autonomous cars or other
+inteligent machines.
+In games we often want to nd equilibrium strategies. It is applicable in
+adversarial games, in which we try to nd the best score we can get. Often
+we consider that the oponent is a perfect adversary, in this case we compute
+Minimax algorithm, considering the adversary trying to minimise our payo
+while we try to maximise. We can also consider non-perfect adversary whith
+a probability of error when the adversary try to minimise the payo, this is
+Expectimax algorithm. We are trying to nd a Nash-equilibrium, it is a strategie
+where our payo is the best when the other player try to minimise it which means
+that if any player changes his strategy his payo will decrease. We will interest
+to those problems. We will rst distinguish the dierents classes for games then
+we will develop each one and conclude.
+2
+Nash-equilibrium overview
+First of all we need to distinguish dierent kind of games that involves dierent
+solutions. There are perfect information games which mean we know all pos-
+sible actions for us and our adversary and every payos for those actions. For
+example chess is a perfect information game whereas poker is not, poker is an
+imperfect information game.
+We also need to distinguish how the game is represented because dierent
+representations imply dierents methods. There are two game representations.
+The rst representation is normal form. It is a matrix with k dimensions,
+one for each player, for exemple 3 dimensions for 3 players, every column and
+1row represent the strategies avialable for players and every entries represent the
+payos for a combinaison of strategies. The other representation is extensive
+form, it is a tree where nodes represent choices, when we open a node it reveals
+choices for the next player, the succession of choices makes a strategy.
+Figure 1  Classes of problems
+2.1
+2.1.1
+Perfect Information Games
+Normal Form Games
+We will interest to the perfect information normal form games, for example
+rock paper scissors is a game that corresponds to those criteria but it is also a
+simultaneous one turn game so each strategy will win with 13 probability. If we
+play more than one turn we need to nd a Nash optimal mixed strategy which
+mean not playing the same strategy every time, the Oshi-Zumo game is that
+kind of game too. [2]
+In this game there are pure winning states, where a player can not loose
+because the adversary can not make a bet for exemple. We want to nd those
+states so we start from those boundary positions and iterate through all posi-
+tions. This is a linear problem to solve, after computing we have a probability
+for each bet, we then play a Nash optimal mixed strategy. Those kind of prob-
+lems are the easiest to solve but does not give a clear answer to which strategy
+to play because players play simultaneously and we do not react to the other
+player moves in this case we do not nd a Nash-equilibrium with a minimax
+algorithm. [2]
+2.1.2
+Extensive Form Games
+Now what if the game is still a perfect information game but with an extensive
+form? Here the Nash equilibrium is harder to nd, we need to simplify the
+problem. First we limit the problem to two players games, then we convert the
+representation of the game to a normal form even if the matrix is exponentilally
+large in the size of the game tree because but with perfect recall it is smaller. [3]
+2Finally we have a linear complementarity problem (LCP) to solve, the Lemke's
+algorithm is a generalisation of Lemke-Howson method to solve tose problems,
+we use this because Lemke-Howson method has problems with LCP resulting
+from extensive form. Finally this algorithm terminates with a solution but it
+can miss some solutions because as Lemke-Howson method, Lemke's algorithm
+may be an elusive method. [3]
+There are also other algorithms that solve extensive form perfect information
+games, one is a Lemke-Howson algorithm variant presented by Wilson (1972),
+but is only proved by empirical observation. [3]
+Another one is by considering subgame perfect equilibrium and then consider
+increasingly larger trees using the BackWardInduction algorithm which is a
+minimax algorithm. [7]
+2.2
+2.2.1
+Imperfect Information Games
+Extensive Form Games
+Finally it remains the imperfect information game, we will interest to the ex-
+tensive form ones. So what are imperfect information extensive games ? It
+means that if we are in state that has the same choices than another one, we
+can not distinguish in which state we are. This time we can not simplify the
+problem by recasting it into normal form game because as said before the matrix
+is exponentilally large in size of the game tree it results of the listing of every
+possibility. A solution is to create a new form called the sequence form game in
+a matrix which is linear in the size of the game tree. [4][7]
+It has been improved by the creation of the Gala system which try to gives
+a better game representation. The Gala language can be use in algorithm to
+solve the problem as well in normal form algorithm for small games. [4]
+2.2.2
+Poker exemple
+Now we have the represetation we need to compute the algorithm to solve those
+kind of problems. In fact a lot of research about those problems are on poker
+because it is a popular game with a very large tree representation that we
+actually can not solve but we can simplify it by reducing the number of player
+or the amount of bets. Whith simplications we are now able to weakly solved
+Head's up Limited Hold'em Poker (HULHE), weakly solved means we have an
+" -Nash equilibrium whish is a Nash equilibrium that succed with a probability
+1- " , and " needs to be very small. [1]
+To get this result we compute an improvment of Counterfactual Regret Min-
+imization (CFR) algorithm CFR + . The CFR algorithm needed to improved
+because it took too much ressources to be compute. [1][6]
+Now Head's up No Limit Hold'em Poker (HUNLHE) has an IA which do
+not compute a solution but which is able to defeat professionnal players. With
+the evolution of the technology we will one day able to solve full poker game. [5]
+33
+Conclusion
+To conclude methods to nd a equilibrium are really dierents in function of
+the class of the game. The nature of the information is the main limit for the
+algorithms to nd an equilibrium before the form of the game. Imperfect infor-
+mation games are harder to solve and need a lot more ressources, so the games
+we can solve increase with the evolution of the technology. Finally improving the
+representation and the description of a game help us to compute more eciently
+to nd a solution.
+References
+[1] Michael Bowling, Neil Burch, Michael Johanson, and Oskari Tammelin.
+Heads-up limit holdâem poker is solved. Science , 347(6218):145149, 2015.
+[2] Michael Buro. Solving the oshi-zumo game. In
+Games , pages 361366. Springer, 2004.
+Advances in Computer
+[3] Daphne Koller, Nimrod Megiddo, and Bernhard Von Stengel. Ecient com-
+putation of equilibria for extensive two-person games. Games and economic
+behavior , 14(2):247259, 1996.
+[4] Daphne Koller and Avi Pfeer. Generating and solving imperfect information
+games. In IJCAI , pages 11851193, 1995.
+[5] Matej Morav£ík, Martin Schmid, Neil Burch, Viliam Lisy, Dustin Morrill,
+Nolan Bard, Trevor Davis, Kevin Waugh, Michael Johanson, and Michael
+Bowling. Deepstack: Expert-level articial intelligence in no-limit poker.
+arXiv preprint arXiv:1701.01724 , 2017.
+[6] Todd W Neller and Marc Lanctot. An introduction to counterfactual regret
+minimization, 2013.
+[7] Yoav Shoham and Kevin Leyton-Brown. Multiagent systems: Algorithmic,
+game-theoretic, and logical foundations . Cambridge University Press, 2008.a
+4
+State of the art
+Thomas Rochette
+1
+Introduction
+The Articial Inteligence (AI) is a large eld including a lot of methods to solve
+practical and theoretical problems including games. All thoses methods are
+linked to algorithms which have evolved since the middle of the 20 th century with
+the progress o hardware and software. We are now capable to store an amount
+of data that we could not even imagine at the begining of AI research. More,
+we can develop and compute sosticated algorithms with tools and languages
+that are now easier to use, everyone can now learn and start develop his own
+AI. Nowadays with the expansion of techonoly, which we use all the time, and
+the development of Internet Of Things, IA is an important subject of research
+and companyies invest a lot in it trying to develop autonomous cars or other
+inteligent machines.
+In games we often want to nd equilibrium strategies. It is applicable in
+adversarial games, in which we try to nd the best score we can get. Often
+we consider that the oponent is a perfect adversary, in this case we compute
+Minimax algorithm, considering the adversary trying to minimise our payo
+while we try to maximise. We can also consider non-perfect adversary whith
+a probability of error when the adversary try to minimise the payo, this is
+Expectimax algorithm. We are trying to nd a Nash-equilibrium, it is a strategie
+where our payo is the best when the other player try to minimise it which means
+that if any player changes his strategy his payo will decrease. We will interest
+to those problems. We will rst distinguish the dierents classes for games then
+we will develop each one and conclude.
+2
+Nash-equilibrium overview
+First of all we need to distinguish dierent kind of games that involves dierent
+solutions. There are perfect information games which mean we know all pos-
+sible actions for us and our adversary and every payos for those actions. For
+example chess is a perfect information game whereas poker is not, poker is an
+imperfect information game.
+We also need to distinguish how the game is represented because dierent
+representations imply dierents methods. There are two game representations.
+The rst representation is normal form. It is a matrix with k dimensions,
+one for each player, for exemple 3 dimensions for 3 players, every column and
+1row represent the strategies avialable for players and every entries represent the
+payos for a combinaison of strategies. The other representation is extensive
+form, it is a tree where nodes represent choices, when we open a node it reveals
+choices for the next player, the succession of choices makes a strategy.
+Figure 1  Classes of problems
+2.1
+2.1.1
+Perfect Information Games
+Normal Form Games
+We will interest to the perfect information normal form games, for example
+rock paper scissors is a game that corresponds to those criteria but it is also a
+simultaneous one turn game so each strategy will win with 13 probability. If we
+play more than one turn we need to nd a Nash optimal mixed strategy which
+mean not playing the same strategy every time, the Oshi-Zumo game is that
+kind of game too. [2]
+In this game there are pure winning states, where a player can not loose
+because the adversary can not make a bet for exemple. We want to nd those
+states so we start from those boundary positions and iterate through all posi-
+tions. This is a linear problem to solve, after computing we have a probability
+for each bet, we then play a Nash optimal mixed strategy. Those kind of prob-
+lems are the easiest to solve but does not give a clear answer to which strategy
+to play because players play simultaneously and we do not react to the other
+player moves in this case we do not nd a Nash-equilibrium with a minimax
+algorithm. [2]
+2.1.2
+Extensive Form Games
+Now what if the game is still a perfect information game but with an extensive
+form? Here the Nash equilibrium is harder to nd, we need to simplify the
+problem. First we limit the problem to two players games, then we convert the
+representation of the game to a normal form even if the matrix is exponentilally
+large in the size of the game tree because but with perfect recall it is smaller. [3]
+2Finally we have a linear complementarity problem (LCP) to solve, the Lemke's
+algorithm is a generalisation of Lemke-Howson method to solve tose problems,
+we use this because Lemke-Howson method has problems with LCP resulting
+from extensive form. Finally this algorithm terminates with a solution but it
+can miss some solutions because as Lemke-Howson method, Lemke's algorithm
+may be an elusive method. [3]
+There are also other algorithms that solve extensive form perfect information
+games, one is a Lemke-Howson algorithm variant presented by Wilson (1972),
+but is only proved by empirical observation. [3]
+Another one is by considering subgame perfect equilibrium and then consider
+increasingly larger trees using the BackWardInduction algorithm which is a
+minimax algorithm. [7]
+2.2
+2.2.1
+Imperfect Information Games
+Extensive Form Games
+Finally it remains the imperfect information game, we will interest to the ex-
+tensive form ones. So what are imperfect information extensive games ? It
+means that if we are in state that has the same choices than another one, we
+can not distinguish in which state we are. This time we can not simplify the
+problem by recasting it into normal form game because as said before the matrix
+is exponentilally large in size of the game tree it results of the listing of every
+possibility. A solution is to create a new form called the sequence form game in
+a matrix which is linear in the size of the game tree. [4][7]
+It has been improved by the creation of the Gala system which try to gives
+a better game representation. The Gala language can be use in algorithm to
+solve the problem as well in normal form algorithm for small games. [4]
+2.2.2
+Poker exemple
+Now we have the represetation we need to compute the algorithm to solve those
+kind of problems. In fact a lot of research about those problems are on poker
+because it is a popular game with a very large tree representation that we
+actually can not solve but we can simplify it by reducing the number of player
+or the amount of bets. Whith simplications we are now able to weakly solved
+Head's up Limited Hold'em Poker (HULHE), weakly solved means we have an
+" -Nash equilibrium whish is a Nash equilibrium that succed with a probability
+1- " , and " needs to be very small. [1]
+To get this result we compute an improvment of Counterfactual Regret Min-
+imization (CFR) algorithm CFR + . The CFR algorithm needed to improved
+because it took too much ressources to be compute. [1][6]
+Now Head's up No Limit Hold'em Poker (HUNLHE) has an IA which do
+not compute a solution but which is able to defeat professionnal players. With
+the evolution of the technology we will one day able to solve full poker game. [5]
+33
+Conclusion
+To conclude methods to nd a equilibrium are really dierents in function of
+the class of the game. The nature of the information is the main limit for the
+algorithms to nd an equilibrium before the form of the game. Imperfect infor-
+mation games are harder to solve and need a lot more ressources, so the games
+we can solve increase with the evolution of the technology. Finally improving the
+representation and the description of a game help us to compute more eciently
+to nd a solution.
+References
+[1] Michael Bowling, Neil Burch, Michael Johanson, and Oskari Tammelin.
+Heads-up limit holdâem poker is solved. Science , 347(6218):145149, 2015.
+[2] Michael Buro. Solving the oshi-zumo game. In
+Games , pages 361366. Springer, 2004.
+Advances in Computer
+[3] Daphne Koller, Nimrod Megiddo, and Bernhard Von Stengel. Ecient com-
+putation of equilibria for extensive two-person games. Games and economic
+behavior , 14(2):247259, 1996.
+[4] Daphne Koller and Avi Pfeer. Generating and solving imperfect information
+games. In IJCAI , pages 11851193, 1995.
+[5] Matej Morav£ík, Martin Schmid, Neil Burch, Viliam Lisy, Dustin Morrill,
+Nolan Bard, Trevor Davis, Kevin Waugh, Michael Johanson, and Michael
+Bowling. Deepstack: Expert-level articial intelligence in no-limit poker.
+arXiv preprint arXiv:1701.01724 , 2017.
+[6] Todd W Neller and Marc Lanctot. An introduction to counterfactual regret
+minimization, 2013.
+[7] Yoav Shoham and Kevin Leyton-Brown. Multiagent systems: Algorithmic,
+game-theoretic, and logical foundations . Cambridge University Press, 2008.a
+4
+State of the art
+Thomas Rochette
+1
+Introduction
+The Articial Inteligence (AI) is a large eld including a lot of methods to solve
+practical and theoretical problems including games. All thoses methods are
+linked to algorithms which have evolved since the middle of the 20 th century with
+the progress o hardware and software. We are now capable to store an amount
+of data that we could not even imagine at the begining of AI research. More,
+we can develop and compute sosticated algorithms with tools and languages
+that are now easier to use, everyone can now learn and start develop his own
+AI. Nowadays with the expansion of techonoly, which we use all the time, and
+the development of Internet Of Things, IA is an important subject of research
+and companyies invest a lot in it trying to develop autonomous cars or other
+inteligent machines.
+In games we often want to nd equilibrium strategies. It is applicable in
+adversarial games, in which we try to nd the best score we can get. Often
+we consider that the oponent is a perfect adversary, in this case we compute
+Minimax algorithm, considering the adversary trying to minimise our payo
+while we try to maximise. We can also consider non-perfect adversary whith
+a probability of error when the adversary try to minimise the payo, this is
+Expectimax algorithm. We are trying to nd a Nash-equilibrium, it is a strategie
+where our payo is the best when the other player try to minimise it which means
+that if any player changes his strategy his payo will decrease. We will interest
+to those problems. We will rst distinguish the dierents classes for games then
+we will develop each one and conclude.
+2
+Nash-equilibrium overview
+First of all we need to distinguish dierent kind of games that involves dierent
+solutions. There are perfect information games which mean we know all pos-
+sible actions for us and our adversary and every payos for those actions. For
+example chess is a perfect information game whereas poker is not, poker is an
+imperfect information game.
+We also need to distinguish how the game is represented because dierent
+representations imply dierents methods. There are two game representations.
+The rst representation is normal form. It is a matrix with k dimensions,
+one for each player, for exemple 3 dimensions for 3 players, every column and
+1row represent the strategies avialable for players and every entries represent the
+payos for a combinaison of strategies. The other representation is extensive
+form, it is a tree where nodes represent choices, when we open a node it reveals
+choices for the next player, the succession of choices makes a strategy.
+Figure 1  Classes of problems
+2.1
+2.1.1
+Perfect Information Games
+Normal Form Games
+We will interest to the perfect information normal form games, for example
+rock paper scissors is a game that corresponds to those criteria but it is also a
+simultaneous one turn game so each strategy will win with 13 probability. If we
+play more than one turn we need to nd a Nash optimal mixed strategy which
+mean not playing the same strategy every time, the Oshi-Zumo game is that
+kind of game too. [2]
+In this game there are pure winning states, where a player can not loose
+because the adversary can not make a bet for exemple. We want to nd those
+states so we start from those boundary positions and iterate through all posi-
+tions. This is a linear problem to solve, after computing we have a probability
+for each bet, we then play a Nash optimal mixed strategy. Those kind of prob-
+lems are the easiest to solve but does not give a clear answer to which strategy
+to play because players play simultaneously and we do not react to the other
+player moves in this case we do not nd a Nash-equilibrium with a minimax
+algorithm. [2]
+2.1.2
+Extensive Form Games
+Now what if the game is still a perfect information game but with an extensive
+form? Here the Nash equilibrium is harder to nd, we need to simplify the
+problem. First we limit the problem to two players games, then we convert the
+representation of the game to a normal form even if the matrix is exponentilally
+large in the size of the game tree because but with perfect recall it is smaller. [3]
+2Finally we have a linear complementarity problem (LCP) to solve, the Lemke's
+algorithm is a generalisation of Lemke-Howson method to solve tose problems,
+we use this because Lemke-Howson method has problems with LCP resulting
+from extensive form. Finally this algorithm terminates with a solution but it
+can miss some solutions because as Lemke-Howson method, Lemke's algorithm
+may be an elusive method. [3]
+There are also other algorithms that solve extensive form perfect information
+games, one is a Lemke-Howson algorithm variant presented by Wilson (1972),
+but is only proved by empirical observation. [3]
+Another one is by considering subgame perfect equilibrium and then consider
+increasingly larger trees using the BackWardInduction algorithm which is a
+minimax algorithm. [7]
+2.2
+2.2.1
+Imperfect Information Games
+Extensive Form Games
+Finally it remains the imperfect information game, we will interest to the ex-
+tensive form ones. So what are imperfect information extensive games ? It
+means that if we are in state that has the same choices than another one, we
+can not distinguish in which state we are. This time we can not simplify the
+problem by recasting it into normal form game because as said before the matrix
+is exponentilally large in size of the game tree it results of the listing of every
+possibility. A solution is to create a new form called the sequence form game in
+a matrix which is linear in the size of the game tree. [4][7]
+It has been improved by the creation of the Gala system which try to gives
+a better game representation. The Gala language can be use in algorithm to
+solve the problem as well in normal form algorithm for small games. [4]
+2.2.2
+Poker exemple
+Now we have the represetation we need to compute the algorithm to solve those
+kind of problems. In fact a lot of research about those problems are on poker
+because it is a popular game with a very large tree representation that we
+actually can not solve but we can simplify it by reducing the number of player
+or the amount of bets. Whith simplications we are now able to weakly solved
+Head's up Limited Hold'em Poker (HULHE), weakly solved means we have an
+" -Nash equilibrium whish is a Nash equilibrium that succed with a probability
+1- " , and " needs to be very small. [1]
+To get this result we compute an improvment of Counterfactual Regret Min-
+imization (CFR) algorithm CFR + . The CFR algorithm needed to improved
+because it took too much ressources to be compute. [1][6]
+Now Head's up No Limit Hold'em Poker (HUNLHE) has an IA which do
+not compute a solution but which is able to defeat professionnal players. With
+the evolution of the technology we will one day able to solve full poker game. [5]
+33
+Conclusion
+To conclude methods to nd a equilibrium are really dierents in function of
+the class of the game. The nature of the information is the main limit for the
+algorithms to nd an equilibrium before the form of the game. Imperfect infor-
+mation games are harder to solve and need a lot more ressources, so the games
+we can solve increase with the evolution of the technology. Finally improving the
+representation and the description of a game help us to compute more eciently
+to nd a solution.
+References
+[1] Michael Bowling, Neil Burch, Michael Johanson, and Oskari Tammelin.
+Heads-up limit holdâem poker is solved. Science , 347(6218):145149, 2015.
+[2] Michael Buro. Solving the oshi-zumo game. In
+Games , pages 361366. Springer, 2004.
+Advances in Computer
+[3] Daphne Koller, Nimrod Megiddo, and Bernhard Von Stengel. Ecient com-
+putation of equilibria for extensive two-person games. Games and economic
+behavior , 14(2):247259, 1996.
+[4] Daphne Koller and Avi Pfeer. Generating and solving imperfect information
+games. In IJCAI , pages 11851193, 1995.
+[5] Matej Morav£ík, Martin Schmid, Neil Burch, Viliam Lisy, Dustin Morrill,
+Nolan Bard, Trevor Davis, Kevin Waugh, Michael Johanson, and Michael
+Bowling. Deepstack: Expert-level articial intelligence in no-limit poker.
+arXiv preprint arXiv:1701.01724 , 2017.
+[6] Todd W Neller and Marc Lanctot. An introduction to counterfactual regret
+minimization, 2013.
+[7] Yoav Shoham and Kevin Leyton-Brown. Multiagent systems: Algorithmic,
+game-theoretic, and logical foundations . Cambridge University Press, 2008.a
+4
+State of the art
+Thomas Rochette
+1
+Introduction
+The Articial Inteligence (AI) is a large eld including a lot of methods to solve
+practical and theoretical problems including games. All thoses methods are
+linked to algorithms which have evolved since the middle of the 20 th century with
+the progress o hardware and software. We are now capable to store an amount
+of data that we could not even imagine at the begining of AI research. More,
+we can develop and compute sosticated algorithms with tools and languages
+that are now easier to use, everyone can now learn and start develop his own
+AI. Nowadays with the expansion of techonoly, which we use all the time, and
+the development of Internet Of Things, IA is an important subject of research
+and companyies invest a lot in it trying to develop autonomous cars or other
+inteligent machines.
+In games we often want to nd equilibrium strategies. It is applicable in
+adversarial games, in which we try to nd the best score we can get. Often
+we consider that the oponent is a perfect adversary, in this case we compute
+Minimax algorithm, considering the adversary trying to minimise our payo
+while we try to maximise. We can also consider non-perfect adversary whith
+a probability of error when the adversary try to minimise the payo, this is
+Expectimax algorithm. We are trying to nd a Nash-equilibrium, it is a strategie
+where our payo is the best when the other player try to minimise it which means
+that if any player changes his strategy his payo will decrease. We will interest
+to those problems. We will rst distinguish the dierents classes for games then
+we will develop each one and conclude.
+2
+Nash-equilibrium overview
+First of all we need to distinguish dierent kind of games that involves dierent
+solutions. There are perfect information games which mean we know all pos-
+sible actions for us and our adversary and every payos for those actions. For
+example chess is a perfect information game whereas poker is not, poker is an
+imperfect information game.
+We also need to distinguish how the game is represented because dierent
+representations imply dierents methods. There are two game representations.
+The rst representation is normal form. It is a matrix with k dimensions,
+one for each player, for exemple 3 dimensions for 3 players, every column and
+1row represent the strategies avialable for players and every entries represent the
+payos for a combinaison of strategies. The other representation is extensive
+form, it is a tree where nodes represent choices, when we open a node it reveals
+choices for the next player, the succession of choices makes a strategy.
+Figure 1  Classes of problems
+2.1
+2.1.1
+Perfect Information Games
+Normal Form Games
+We will interest to the perfect information normal form games, for example
+rock paper scissors is a game that corresponds to those criteria but it is also a
+simultaneous one turn game so each strategy will win with 13 probability. If we
+play more than one turn we need to nd a Nash optimal mixed strategy which
+mean not playing the same strategy every time, the Oshi-Zumo game is that
+kind of game too. [2]
+In this game there are pure winning states, where a player can not loose
+because the adversary can not make a bet for exemple. We want to nd those
+states so we start from those boundary positions and iterate through all posi-
+tions. This is a linear problem to solve, after computing we have a probability
+for each bet, we then play a Nash optimal mixed strategy. Those kind of prob-
+lems are the easiest to solve but does not give a clear answer to which strategy
+to play because players play simultaneously and we do not react to the other
+player moves in this case we do not nd a Nash-equilibrium with a minimax
+algorithm. [2]
+2.1.2
+Extensive Form Games
+Now what if the game is still a perfect information game but with an extensive
+form? Here the Nash equilibrium is harder to nd, we need to simplify the
+problem. First we limit the problem to two players games, then we convert the
+representation of the game to a normal form even if the matrix is exponentilally
+large in the size of the game tree because but with perfect recall it is smaller. [3]
+2Finally we have a linear complementarity problem (LCP) to solve, the Lemke's
+algorithm is a generalisation of Lemke-Howson method to solve tose problems,
+we use this because Lemke-Howson method has problems with LCP resulting
+from extensive form. Finally this algorithm terminates with a solution but it
+can miss some solutions because as Lemke-Howson method, Lemke's algorithm
+may be an elusive method. [3]
+There are also other algorithms that solve extensive form perfect information
+games, one is a Lemke-Howson algorithm variant presented by Wilson (1972),
+but is only proved by empirical observation. [3]
+Another one is by considering subgame perfect equilibrium and then consider
+increasingly larger trees using the BackWardInduction algorithm which is a
+minimax algorithm. [7]
+2.2
+2.2.1
+Imperfect Information Games
+Extensive Form Games
+Finally it remains the imperfect information game, we will interest to the ex-
+tensive form ones. So what are imperfect information extensive games ? It
+means that if we are in state that has the same choices than another one, we
+can not distinguish in which state we are. This time we can not simplify the
+problem by recasting it into normal form game because as said before the matrix
+is exponentilally large in size of the game tree it results of the listing of every
+possibility. A solution is to create a new form called the sequence form game in
+a matrix which is linear in the size of the game tree. [4][7]
+It has been improved by the creation of the Gala system which try to gives
+a better game representation. The Gala language can be use in algorithm to
+solve the problem as well in normal form algorithm for small games. [4]
+2.2.2
+Poker exemple
+Now we have the represetation we need to compute the algorithm to solve those
+kind of problems. In fact a lot of research about those problems are on poker
+because it is a popular game with a very large tree representation that we
+actually can not solve but we can simplify it by reducing the number of player
+or the amount of bets. Whith simplications we are now able to weakly solved
+Head's up Limited Hold'em Poker (HULHE), weakly solved means we have an
+" -Nash equilibrium whish is a Nash equilibrium that succed with a probability
+1- " , and " needs to be very small. [1]
+To get this result we compute an improvment of Counterfactual Regret Min-
+imization (CFR) algorithm CFR + . The CFR algorithm needed to improved
+because it took too much ressources to be compute. [1][6]
+Now Head's up No Limit Hold'em Poker (HUNLHE) has an IA which do
+not compute a solution but which is able to defeat professionnal players. With
+the evolution of the technology we will one day able to solve full poker game. [5]
+33
+Conclusion
+To conclude methods to nd a equilibrium are really dierents in function of
+the class of the game. The nature of the information is the main limit for the
+algorithms to nd an equilibrium before the form of the game. Imperfect infor-
+mation games are harder to solve and need a lot more ressources, so the games
+we can solve increase with the evolution of the technology. Finally improving the
+representation and the description of a game help us to compute more eciently
+to nd a solution.
+References
+[1] Michael Bowling, Neil Burch, Michael Johanson, and Oskari Tammelin.
+Heads-up limit holdâem poker is solved. Science , 347(6218):145149, 2015.
+[2] Michael Buro. Solving the oshi-zumo game. In
+Games , pages 361366. Springer, 2004.
+Advances in Computer
+[3] Daphne Koller, Nimrod Megiddo, and Bernhard Von Stengel. Ecient com-
+putation of equilibria for extensive two-person games. Games and economic
+behavior , 14(2):247259, 1996.
+[4] Daphne Koller and Avi Pfeer. Generating and solving imperfect information
+games. In IJCAI , pages 11851193, 1995.
+[5] Matej Morav£ík, Martin Schmid, Neil Burch, Viliam Lisy, Dustin Morrill,
+Nolan Bard, Trevor Davis, Kevin Waugh, Michael Johanson, and Michael
+Bowling. Deepstack: Expert-level articial intelligence in no-limit poker.
+arXiv preprint arXiv:1701.01724 , 2017.
+[6] Todd W Neller and Marc Lanctot. An introduction to counterfactual regret
+minimization, 2013.
+[7] Yoav Shoham and Kevin Leyton-Brown. Multiagent systems: Algorithmic,
+game-theoretic, and logical foundations . Cambridge University Press, 2008.a
+4
+State of the art
+Thomas Rochette
+1
+Introduction
+The Articial Inteligence (AI) is a large eld including a lot of methods to solve
+practical and theoretical problems including games. All thoses methods are
+linked to algorithms which have evolved since the middle of the 20 th century with
+the progress o hardware and software. We are now capable to store an amount
+of data that we could not even imagine at the begining of AI research. More,
+we can develop and compute sosticated algorithms with tools and languages
+that are now easier to use, everyone can now learn and start develop his own
+AI. Nowadays with the expansion of techonoly, which we use all the time, and
+the development of Internet Of Things, IA is an important subject of research
+and companyies invest a lot in it trying to develop autonomous cars or other
+inteligent machines.
+In games we often want to nd equilibrium strategies. It is applicable in
+adversarial games, in which we try to nd the best score we can get. Often
+we consider that the oponent is a perfect adversary, in this case we compute
+Minimax algorithm, considering the adversary trying to minimise our payo
+while we try to maximise. We can also consider non-perfect adversary whith
+a probability of error when the adversary try to minimise the payo, this is
+Expectimax algorithm. We are trying to nd a Nash-equilibrium, it is a strategie
+where our payo is the best when the other player try to minimise it which means
+that if any player changes his strategy his payo will decrease. We will interest
+to those problems. We will rst distinguish the dierents classes for games then
+we will develop each one and conclude.
+2
+Nash-equilibrium overview
+First of all we need to distinguish dierent kind of games that involves dierent
+solutions. There are perfect information games which mean we know all pos-
+sible actions for us and our adversary and every payos for those actions. For
+example chess is a perfect information game whereas poker is not, poker is an
+imperfect information game.
+We also need to distinguish how the game is represented because dierent
+representations imply dierents methods. There are two game representations.
+The rst representation is normal form. It is a matrix with k dimensions,
+one for each player, for exemple 3 dimensions for 3 players, every column and
+1row represent the strategies avialable for players and every entries represent the
+payos for a combinaison of strategies. The other representation is extensive
+form, it is a tree where nodes represent choices, when we open a node it reveals
+choices for the next player, the succession of choices makes a strategy.
+Figure 1  Classes of problems
+2.1
+2.1.1
+Perfect Information Games
+Normal Form Games
+We will interest to the perfect information normal form games, for example
+rock paper scissors is a game that corresponds to those criteria but it is also a
+simultaneous one turn game so each strategy will win with 13 probability. If we
+play more than one turn we need to nd a Nash optimal mixed strategy which
+mean not playing the same strategy every time, the Oshi-Zumo game is that
+kind of game too. [2]
+In this game there are pure winning states, where a player can not loose
+because the adversary can not make a bet for exemple. We want to nd those
+states so we start from those boundary positions and iterate through all posi-
+tions. This is a linear problem to solve, after computing we have a probability
+for each bet, we then play a Nash optimal mixed strategy. Those kind of prob-
+lems are the easiest to solve but does not give a clear answer to which strategy
+to play because players play simultaneously and we do not react to the other
+player moves in this case we do not nd a Nash-equilibrium with a minimax
+algorithm. [2]
+2.1.2
+Extensive Form Games
+Now what if the game is still a perfect information game but with an extensive
+form? Here the Nash equilibrium is harder to nd, we need to simplify the
+problem. First we limit the problem to two players games, then we convert the
+representation of the game to a normal form even if the matrix is exponentilally
+large in the size of the game tree because but with perfect recall it is smaller. [3]
+2Finally we have a linear complementarity problem (LCP) to solve, the Lemke's
+algorithm is a generalisation of Lemke-Howson method to solve tose problems,
+we use this because Lemke-Howson method has problems with LCP resulting
+from extensive form. Finally this algorithm terminates with a solution but it
+can miss some solutions because as Lemke-Howson method, Lemke's algorithm
+may be an elusive method. [3]
+There are also other algorithms that solve extensive form perfect information
+games, one is a Lemke-Howson algorithm variant presented by Wilson (1972),
+but is only proved by empirical observation. [3]
+Another one is by considering subgame perfect equilibrium and then consider
+increasingly larger trees using the BackWardInduction algorithm which is a
+minimax algorithm. [7]
+2.2
+2.2.1
+Imperfect Information Games
+Extensive Form Games
+Finally it remains the imperfect information game, we will interest to the ex-
+tensive form ones. So what are imperfect information extensive games ? It
+means that if we are in state that has the same choices than another one, we
+can not distinguish in which state we are. This time we can not simplify the
+problem by recasting it into normal form game because as said before the matrix
+is exponentilally large in size of the game tree it results of the listing of every
+possibility. A solution is to create a new form called the sequence form game in
+a matrix which is linear in the size of the game tree. [4][7]
+It has been improved by the creation of the Gala system which try to gives
+a better game representation. The Gala language can be use in algorithm to
+solve the problem as well in normal form algorithm for small games. [4]
+2.2.2
+Poker exemple
+Now we have the represetation we need to compute the algorithm to solve those
+kind of problems. In fact a lot of research about those problems are on poker
+because it is a popular game with a very large tree representation that we
+actually can not solve but we can simplify it by reducing the number of player
+or the amount of bets. Whith simplications we are now able to weakly solved
+Head's up Limited Hold'em Poker (HULHE), weakly solved means we have an
+" -Nash equilibrium whish is a Nash equilibrium that succed with a probability
+1- " , and " needs to be very small. [1]
+To get this result we compute an improvment of Counterfactual Regret Min-
+imization (CFR) algorithm CFR + . The CFR algorithm needed to improved
+because it took too much ressources to be compute. [1][6]
+Now Head's up No Limit Hold'em Poker (HUNLHE) has an IA which do
+not compute a solution but which is able to defeat professionnal players. With
+the evolution of the technology we will one day able to solve full poker game. [5]
+33
+Conclusion
+To conclude methods to nd a equilibrium are really dierents in function of
+the class of the game. The nature of the information is the main limit for the
+algorithms to nd an equilibrium before the form of the game. Imperfect infor-
+mation games are harder to solve and need a lot more ressources, so the games
+we can solve increase with the evolution of the technology. Finally improving the
+representation and the description of a game help us to compute more eciently
+to nd a solution.
+References
+[1] Michael Bowling, Neil Burch, Michael Johanson, and Oskari Tammelin.
+Heads-up limit holdâem poker is solved. Science , 347(6218):145149, 2015.
+[2] Michael Buro. Solving the oshi-zumo game. In
+Games , pages 361366. Springer, 2004.
+Advances in Computer
+[3] Daphne Koller, Nimrod Megiddo, and Bernhard Von Stengel. Ecient com-
+putation of equilibria for extensive two-person games. Games and economic
+behavior , 14(2):247259, 1996.
+[4] Daphne Koller and Avi Pfeer. Generating and solving imperfect information
+games. In IJCAI , pages 11851193, 1995.
+[5] Matej Morav£ík, Martin Schmid, Neil Burch, Viliam Lisy, Dustin Morrill,
+Nolan Bard, Trevor Davis, Kevin Waugh, Michael Johanson, and Michael
+Bowling. Deepstack: Expert-level articial intelligence in no-limit poker.
+arXiv preprint arXiv:1701.01724 , 2017.
+[6] Todd W Neller and Marc Lanctot. An introduction to counterfactual regret
+minimization, 2013.
+[7] Yoav Shoham and Kevin Leyton-Brown. Multiagent systems: Algorithmic,
+game-theoretic, and logical foundations . Cambridge University Press, 2008.a
+4
+State of the art
+Thomas Rochette
+1
+Introduction
+The Articial Inteligence (AI) is a large eld including a lot of methods to solve
+practical and theoretical problems including games. All thoses methods are
+linked to algorithms which have evolved since the middle of the 20 th century with
+the progress o hardware and software. We are now capable to store an amount
+of data that we could not even imagine at the begining of AI research. More,
+we can develop and compute sosticated algorithms with tools and languages
+that are now easier to use, everyone can now learn and start develop his own
+AI. Nowadays with the expansion of techonoly, which we use all the time, and
+the development of Internet Of Things, IA is an important subject of research
+and companyies invest a lot in it trying to develop autonomous cars or other
+inteligent machines.
+In games we often want to nd equilibrium strategies. It is applicable in
+adversarial games, in which we try to nd the best score we can get. Often
+we consider that the oponent is a perfect adversary, in this case we compute
+Minimax algorithm, considering the adversary trying to minimise our payo
+while we try to maximise. We can also consider non-perfect adversary whith
+a probability of error when the adversary try to minimise the payo, this is
+Expectimax algorithm. We are trying to nd a Nash-equilibrium, it is a strategie
+where our payo is the best when the other player try to minimise it which means
+that if any player changes his strategy his payo will decrease. We will interest
+to those problems. We will rst distinguish the dierents classes for games then
+we will develop each one and conclude.
+2
+Nash-equilibrium overview
+First of all we need to distinguish dierent kind of games that involves dierent
+solutions. There are perfect information games which mean we know all pos-
+sible actions for us and our adversary and every payos for those actions. For
+example chess is a perfect information game whereas poker is not, poker is an
+imperfect information game.
+We also need to distinguish how the game is represented because dierent
+representations imply dierents methods. There are two game representations.
+The rst representation is normal form. It is a matrix with k dimensions,
+one for each player, for exemple 3 dimensions for 3 players, every column and
+1row represent the strategies avialable for players and every entries represent the
+payos for a combinaison of strategies. The other representation is extensive
+form, it is a tree where nodes represent choices, when we open a node it reveals
+choices for the next player, the succession of choices makes a strategy.
+Figure 1  Classes of problems
+2.1
+2.1.1
+Perfect Information Games
+Normal Form Games
+We will interest to the perfect information normal form games, for example
+rock paper scissors is a game that corresponds to those criteria but it is also a
+simultaneous one turn game so each strategy will win with 13 probability. If we
+play more than one turn we need to nd a Nash optimal mixed strategy which
+mean not playing the same strategy every time, the Oshi-Zumo game is that
+kind of game too. [2]
+In this game there are pure winning states, where a player can not loose
+because the adversary can not make a bet for exemple. We want to nd those
+states so we start from those boundary positions and iterate through all posi-
+tions. This is a linear problem to solve, after computing we have a probability
+for each bet, we then play a Nash optimal mixed strategy. Those kind of prob-
+lems are the easiest to solve but does not give a clear answer to which strategy
+to play because players play simultaneously and we do not react to the other
+player moves in this case we do not nd a Nash-equilibrium with a minimax
+algorithm. [2]
+2.1.2
+Extensive Form Games
+Now what if the game is still a perfect information game but with an extensive
+form? Here the Nash equilibrium is harder to nd, we need to simplify the
+problem. First we limit the problem to two players games, then we convert the
+representation of the game to a normal form even if the matrix is exponentilally
+large in the size of the game tree because but with perfect recall it is smaller. [3]
+2Finally we have a linear complementarity problem (LCP) to solve, the Lemke's
+algorithm is a generalisation of Lemke-Howson method to solve tose problems,
+we use this because Lemke-Howson method has problems with LCP resulting
+from extensive form. Finally this algorithm terminates with a solution but it
+can miss some solutions because as Lemke-Howson method, Lemke's algorithm
+may be an elusive method. [3]
+There are also other algorithms that solve extensive form perfect information
+games, one is a Lemke-Howson algorithm variant presented by Wilson (1972),
+but is only proved by empirical observation. [3]
+Another one is by considering subgame perfect equilibrium and then consider
+increasingly larger trees using the BackWardInduction algorithm which is a
+minimax algorithm. [7]
+2.2
+2.2.1
+Imperfect Information Games
+Extensive Form Games
+Finally it remains the imperfect information game, we will interest to the ex-
+tensive form ones. So what are imperfect information extensive games ? It
+means that if we are in state that has the same choices than another one, we
+can not distinguish in which state we are. This time we can not simplify the
+problem by recasting it into normal form game because as said before the matrix
+is exponentilally large in size of the game tree it results of the listing of every
+possibility. A solution is to create a new form called the sequence form game in
+a matrix which is linear in the size of the game tree. [4][7]
+It has been improved by the creation of the Gala system which try to gives
+a better game representation. The Gala language can be use in algorithm to
+solve the problem as well in normal form algorithm for small games. [4]
+2.2.2
+Poker exemple
+Now we have the represetation we need to compute the algorithm to solve those
+kind of problems. In fact a lot of research about those problems are on poker
+because it is a popular game with a very large tree representation that we
+actually can not solve but we can simplify it by reducing the number of player
+or the amount of bets. Whith simplications we are now able to weakly solved
+Head's up Limited Hold'em Poker (HULHE), weakly solved means we have an
+" -Nash equilibrium whish is a Nash equilibrium that succed with a probability
+1- " , and " needs to be very small. [1]
+To get this result we compute an improvment of Counterfactual Regret Min-
+imization (CFR) algorithm CFR + . The CFR algorithm needed to improved
+because it took too much ressources to be compute. [1][6]
+Now Head's up No Limit Hold'em Poker (HUNLHE) has an IA which do
+not compute a solution but which is able to defeat professionnal players. With
+the evolution of the technology we will one day able to solve full poker game. [5]
+33
+Conclusion
+To conclude methods to nd a equilibrium are really dierents in function of
+the class of the game. The nature of the information is the main limit for the
+algorithms to nd an equilibrium before the form of the game. Imperfect infor-
+mation games are harder to solve and need a lot more ressources, so the games
+we can solve increase with the evolution of the technology. Finally improving the
+representation and the description of a game help us to compute more eciently
+to nd a solution.
+References
+[1] Michael Bowling, Neil Burch, Michael Johanson, and Oskari Tammelin.
+Heads-up limit holdâem poker is solved. Science , 347(6218):145149, 2015.
+[2] Michael Buro. Solving the oshi-zumo game. In
+Games , pages 361366. Springer, 2004.
+Advances in Computer
+[3] Daphne Koller, Nimrod Megiddo, and Bernhard Von Stengel. Ecient com-
+putation of equilibria for extensive two-person games. Games and economic
+behavior , 14(2):247259, 1996.
+[4] Daphne Koller and Avi Pfeer. Generating and solving imperfect information
+games. In IJCAI , pages 11851193, 1995.
+[5] Matej Morav£ík, Martin Schmid, Neil Burch, Viliam Lisy, Dustin Morrill,
+Nolan Bard, Trevor Davis, Kevin Waugh, Michael Johanson, and Michael
+Bowling. Deepstack: Expert-level articial intelligence in no-limit poker.
+arXiv preprint arXiv:1701.01724 , 2017.
+[6] Todd W Neller and Marc Lanctot. An introduction to counterfactual regret
+minimization, 2013.
+[7] Yoav Shoham and Kevin Leyton-Brown. Multiagent systems: Algorithmic,
+game-theoretic, and logical foundations . Cambridge University Press, 2008.a
+4
+State of the art
+Thomas Rochette

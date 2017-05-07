@@ -10,7 +10,7 @@
 #include <netinet/in.h>
 
 #include <arpa/inet.h>
-dd
+
 #include <time.h>
 
 
@@ -19,7 +19,7 @@ dd
 //TEST
 int main (int argc, char *argv[]) {
     if(argc != 2) {
-        printf("ERREUR nombre d'arguments invalides\n");
+        printf("ERREUR nombre d'arguments invalides: ./serveur port\n");
     }
 
     /*
@@ -37,6 +37,9 @@ int main (int argc, char *argv[]) {
     int numACK=0;
     char tabACK[6];
     int sizeBuffer;
+    int tailleFenetre=50;
+    int TabACKrecu[50]={0};
+    int TabIndiceACK[50]={0};
 
 
     /*
@@ -139,78 +142,131 @@ int main (int argc, char *argv[]) {
                     memset(bufferACK, 0, RCVSIZE);
                     recvfrom(descripteurSocketDonnees, bufferACK, RCVSIZE, 0, (struct sockaddr*)&adressePrive, &alenPrive);
                     close(descripteurSocketPublic);
-                    numACK =0;
+                    numACK =1;
                     int onContinue = 1;
-                    int i;
+                    int i, j, k;
                     int flightSize=0;
                     int cwnd=1;
-                    char ACKrecu[6] = {'A', 'A', 'A', 'A', 'A', 'A'};
+                    char ACKrecu[6] = "AAAAAA";
+                    int resend=1;
+                    int lastACK;
                     printf("Fichier recherché : %s\n", bufferACK);
                     file = fopen(bufferACK,"r");
-    				if(file==NULL){
-    					printf("Erreur d'ouverture du fichier\n");
-    					exit(1);
-    				}
+            				if(file==NULL){
+            					printf("Erreur d'ouverture du fichier\n");
+            					exit(1);
+            				}
                     printf("Ouverture réussie !!\n");
 
                     //Lecture du fichier
-                    while(onContinue == 1) {
-                        numACK++;
+                    while(onContinue == 1 || resend==1) {
 
-                        memset(tabACK, 0, 6);
-                        memset(bufferEnvoi, '0', BUFFSIZE);
-                        memset(bufferLecture, 0, BUFFSIZE-6);
-                        sprintf(tabACK, "%d", numACK);
+                        resend=0;
+                        memset(TabACKrecu,0,tailleFenetre);
+                        memset(TabIndiceACK,0,tailleFenetre);
+                        for(i=0;i<tailleFenetre;i++){
 
-                        if(numACK<10){
-                            memcpy(&bufferEnvoi[5], tabACK, 1);
-                        }else if(numACK<100){
-                            memcpy(&bufferEnvoi[4], tabACK, 2);
-                        }else if(numACK<1000){
-                            memcpy(&bufferEnvoi[3], tabACK, 3);
-                        }else if(numACK<10000){
-                            memcpy(&bufferEnvoi[2], tabACK, 4);
-                        }else if(numACK<100000){
-                            memcpy(&bufferEnvoi[1], tabACK, 5);
-                        }else if(numACK<1000000){
-                            memcpy(&bufferEnvoi[0], tabACK, 6);
-                        }
-                        printf("Voyons voir : \n");
-                        for(int i =0; i<6; i++) {
-                            printf("%c",bufferEnvoi[i]);
-                        }
-                        printf("\n");
 
-                        sizeBuffer=fread(bufferLecture, 1, BUFFSIZE-6, file);
-                        if(feof(file)){
-                            onContinue=0;
+                          memset(tabACK, 0, 6);
+                          memset(bufferEnvoi, '0', BUFFSIZE);
+                          memset(bufferLecture, 0, BUFFSIZE-6);
+                          sprintf(tabACK, "%d", numACK);
+
+                          if(numACK<10){
+                              memcpy(&bufferEnvoi[5], tabACK, 1);
+                          }else if(numACK<100){
+                              memcpy(&bufferEnvoi[4], tabACK, 2);
+                          }else if(numACK<1000){
+                              memcpy(&bufferEnvoi[3], tabACK, 3);
+                          }else if(numACK<10000){
+                              memcpy(&bufferEnvoi[2], tabACK, 4);
+                          }else if(numACK<100000){
+                              memcpy(&bufferEnvoi[1], tabACK, 5);
+                          }else if(numACK<1000000){
+                              memcpy(&bufferEnvoi[0], tabACK, 6);
+                          }
+                          printf("ACK envoyé: \n");
+                          for(int j =0; j<6; j++) {
+                              printf("%c",bufferEnvoi[j]);
+                          }
+                          printf("\n");
+                          usleep(5000);
+                          sizeBuffer=fread(bufferLecture, 1, BUFFSIZE-6, file);
+                          //printf("Lecture : %s\n", bufferLecture );
+                          memcpy(&bufferEnvoi[6], bufferLecture, BUFFSIZE-6);
+                          usleep(100);
+                          sendto(descripteurSocketDonnees, bufferEnvoi, sizeBuffer+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                          TabACKrecu[i]=0;
+                          TabIndiceACK[i]=numACK;
+                          /*printf("trame 0 :\n%s\n",bufferEnvoi);
+                          sleep(2);
+                          fseek(file,numACK*sizeBuffer, SEEK_SET);
+                          sizeBuffer=fread(bufferLecture, 1, BUFFSIZE-6, file);
+                          printf("trame test :\n%s\n",bufferLecture);
+                          sleep(10);*/
+
+                          numACK++;
+
+                          if(feof(file)){
+                              onContinue=0;
+                              break;
+                          }
+
                         }
-                        memcpy(&bufferEnvoi[6], bufferLecture, BUFFSIZE-6);
+
+
+
+
 
                         //printf("Test après ajout ACK : %s\n", bufferEnvoi);
-                        sendto(descripteurSocketDonnees, bufferEnvoi, sizeBuffer+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
                         flightSize++;
                         printf("On attend confirmation de l'ACK\n");
-
-                        while(atoi(ACKrecu) < numACK && onContinue == 1) {
+                        for(i=0;i<tailleFenetre;i++) {
 
                             FD_ZERO(&Ldesc);
                             FD_SET(descripteurSocketDonnees,&Ldesc);
                             tv.tv_sec=0;
-                            tv.tv_usec =350;
+                            tv.tv_usec =15000;
                             printf("On va faire le select\n");
-                    	    int a = select(descripteurSocketDonnees+1,&Ldesc,NULL,NULL, &tv);
+                    	      int a = select(descripteurSocketDonnees+1,&Ldesc,NULL,NULL, &tv);
                             printf("Select : %d\n", a);
                             if(FD_ISSET(descripteurSocketDonnees,&Ldesc)==1) {
                                 recvfrom(descripteurSocketDonnees, bufferACK, RCVSIZE, 0, (struct sockaddr*)&adressePrive, &alenPrive);
                                 for(int j = 0; j<6; j++) {
                                     ACKrecu[j] = bufferACK[j+3];
                                 }
+                                printf("%d\n", atoi(ACKrecu));
+
+                                for(j=0;j<tailleFenetre;j++){
+                                  if(atoi(ACKrecu)>=TabIndiceACK[j] && TabACKrecu[j]==0){
+                                    TabACKrecu[j]=1;
+                                    //break;
+                                  }
+                                }
+
+
                             } else {
-                                sendto(descripteurSocketDonnees, bufferEnvoi, sizeBuffer+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
+                                break;
+                                //sendto(descripteurSocketDonnees, bufferEnvoi, sizeBuffer+6, 0, (struct sockaddr*)&adressePrive, alenPrive);
 
                             }
                         }
+
+                        for(i=0;i<tailleFenetre;i++){
+                          printf("%d; ",TabACKrecu[i] );
+                        }
+                        printf("\n" );
+
+                        for(i=0;i<tailleFenetre;i++){
+                          if(TabACKrecu[i]==0){
+                            numACK=TabIndiceACK[i];
+                            fseek(file,numACK*(BUFFSIZE-6), SEEK_SET);
+                            resend=1;
+                            printf("On va renvoyer l ack %d d'indice %d\n", numACK, i);
+                            break;
+                          }
+                        }
+
                         flightSize--;
                     }
                     memset(bufferEnvoi, '0', BUFFSIZE);
